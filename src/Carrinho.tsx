@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 function Carrinho() {
   // Define uma variável de estado chamada carrinhoArray e uma função para atualizá-la, setCarrinhoArray
@@ -19,7 +19,7 @@ function Carrinho() {
           </h1>)
         : ''}
     </div>
-  )
+  );
 }
 
 export default Carrinho;

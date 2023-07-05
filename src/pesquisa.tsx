@@ -14,7 +14,12 @@ export default function Pesquisa() {
     <div>
       {/* Renderiza button que dá acesso à página do carrinho de compras */}
       <button>
-      <Link data-testid="shopping-cart-button" to="/shopping-cart">Carrinho de Compras</Link>
+        <Link
+          data-testid="shopping-cart-button"
+          to="/shopping-cart"
+        >
+          Carrinho de Compras
+        </Link>
       </button>
       {/* Renderiza um elemento de entrada de texto com um espaço reservado "Digite sua busca" */}
       <input type="text" placeholder="Digite sua busca" />
