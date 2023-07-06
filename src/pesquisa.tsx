@@ -7,7 +7,7 @@ type CategoriesArray = {
   name: string;
 } [];
 
-type ResultsArray = {
+type DisplayResults = {
   id: string;
   title: string;
   thumbnail: string;
@@ -20,11 +20,11 @@ export default function Pesquisa() {
   const [categoriesArray, setCategoriesArray] = useState<CategoriesArray>([]);
   // Cria um estado para manipulação do input
   const [search, setSearch] = useState('');
-  const [resultsArray, setResultsArray] = useState<ResultsArray>([]);
+  const [productsList, setProductsList] = useState<DisplayResults>([]);
 
   useEffect(() => {
     // Nesse efeito, a função setResultsArray é chamada para definir o valor inicial da variável de estado resultsArray como um array vazio.
-    setResultsArray([]);
+    setProductsList([]);
     const categories = async () => {
       const data = await getCategories();
       setCategoriesArray(data);
@@ -36,7 +36,15 @@ export default function Pesquisa() {
   const handleBotao = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     const produtos = await getProductsFromCategoryAndQuery(undefined, search);
-    setResultsArray(produtos.results);
+    setProductsList(produtos.results);
+  };
+
+  const handleRadio = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const categoriaId = categoriesArray
+      .find((element) => element.id === event.target.id);
+    const resultadosCategoria = await
+    getProductsFromCategoryAndQuery(categoriaId?.id, undefined);
+    setProductsList(resultadosCategoria.results);
   };
 
   return (
@@ -71,14 +79,18 @@ export default function Pesquisa() {
       {categoriesArray.map(({ id, name }) => (
         <div key={ id }>
           <label data-testid="category" htmlFor={ id }>{ name }</label>
-          <input type="radio" id={ id } />
+          <input
+            type="radio"
+            id={ id }
+            onChange={ (event) => handleRadio(event) }
+          />
         </div>
       ))}
       {/* Verifica se o tamanho do array productArray é igual a zero */}
-      {/* Alterado para resultsArray para renderização */}
-      {resultsArray.length > 0
+      {/* Alterado para productsList para renderização */}
+      {productsList.length > 0
         ? (
-          resultsArray.map(({ id, title, thumbnail, price }) => (
+          productsList.map(({ id, title, thumbnail, price }) => (
             <div key={ id } data-testid="product">
               <p>
                 { title }
@@ -91,7 +103,7 @@ export default function Pesquisa() {
           ))
         )
         : (
-          // Se for verdadeiro, renderiza um elemento <h1> com uma mensagem e um atributo data-testid
+          // Se for falso, renderiza um elemento <h1> com uma mensagem e um atributo data-testid
           <h1 data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </h1>)}
