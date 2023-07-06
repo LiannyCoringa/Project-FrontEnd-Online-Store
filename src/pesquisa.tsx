@@ -37,12 +37,8 @@ export default function Pesquisa() {
   // Adiciona a função que lida com o click do botão de pesquisa
   const handleBotao = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
-    const item = categoriesArray
-      .find((propriedade) => propriedade.name === search);
-    if (item?.id) {
-      const produtos = await getProductsFromCategoryAndQuery(item.id, search);
-      setResultsArray(produtos.results);
-    }
+    const produtos = await getProductsFromCategoryAndQuery(undefined, search);
+    setResultsArray(produtos.results);
   };
 
   return (
@@ -82,13 +78,8 @@ export default function Pesquisa() {
       ))}
       {/* Verifica se o tamanho do array productArray é igual a zero */}
       {/* Alterado para resultsArray para renderização */}
-      {resultsArray.length === 0
+      {resultsArray.length > 0
         ? (
-          // Se for verdadeiro, renderiza um elemento <h1> com uma mensagem e um atributo data-testid
-          <h1 data-testid="home-initial-message">
-            Digite algum termo de pesquisa ou escolha uma categoria
-          </h1>)
-        : (
           resultsArray.map(({ id, title, thumbnail, price }) => (
             <div key={ id } data-testid="product">
               <p>
@@ -100,7 +91,13 @@ export default function Pesquisa() {
               </p>
             </div>
           ))
-        )}
+        )
+        : (
+          // Se for verdadeiro, renderiza um elemento <h1> com uma mensagem e um atributo data-testid
+          <h1 data-testid="home-initial-message">
+            Digite algum termo de pesquisa ou escolha uma categoria.
+          </h1>)
+      }
     </div>
   );
 }

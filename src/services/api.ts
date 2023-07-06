@@ -9,7 +9,8 @@ export async function getCategories() {
   return data;
 }
 
-export async function getProductsFromCategoryAndQuery(categoryId: string, query: string) {
+export async function
+getProductsFromCategoryAndQuery(categoryId?: string, query?: string) {
   // Define a URL da API para obter produtos com base na categoria e consulta fornecidas
   const url = `https://api.mercadolibre.com/sites/MLB/search?category=${categoryId}&q=${query}`;
   // Faz uma requisição assíncrona para a URL e aguarda a resposta
