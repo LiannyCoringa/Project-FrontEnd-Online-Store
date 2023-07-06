@@ -15,8 +15,6 @@ type ResultsArray = {
 } [];
 
 export default function Pesquisa() {
-  // Define uma variável de estado chamada productArray e uma função para atualizá-la, setProductArray
-  const [productArray, setProductArray] = useState([]);
   // Define o valor inicial da variável de estado como um array vazio
   // Cria um estado para receber o array das categorias
   const [categoriesArray, setCategoriesArray] = useState<CategoriesArray>([]);
@@ -25,8 +23,8 @@ export default function Pesquisa() {
   const [resultsArray, setResultsArray] = useState<ResultsArray>([]);
 
   useEffect(() => {
-    // Nesse efeito, a função setProductArray é chamada para definir o valor inicial da variável de estado productArray como um array vazio.
-    setProductArray([]);
+    // Nesse efeito, a função setResultsArray é chamada para definir o valor inicial da variável de estado resultsArray como um array vazio.
+    setResultsArray([]);
     const categories = async () => {
       const data = await getCategories();
       setCategoriesArray(data);
@@ -96,8 +94,7 @@ export default function Pesquisa() {
           // Se for verdadeiro, renderiza um elemento <h1> com uma mensagem e um atributo data-testid
           <h1 data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
-          </h1>)
-      }
+          </h1>)}
     </div>
   );
 }
