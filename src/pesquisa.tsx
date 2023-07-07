@@ -96,7 +96,7 @@ export default function Pesquisa() {
       {productsList.length > 0
         ? (
           productsList.map(({ id, title, thumbnail, price }) => (
-            <div
+            <button
               key={ id }
               data-testid="product"
               onClick={ () => handleClickCard(id) }
@@ -109,7 +109,7 @@ export default function Pesquisa() {
               <p>
                 { price }
               </p>
-            </div>
+            </button>
           ))
         )
         : (
