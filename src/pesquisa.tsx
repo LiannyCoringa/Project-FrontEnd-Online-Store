@@ -117,25 +117,25 @@ export default function Pesquisa() {
       {/* Alterado para productsList para renderização */}
       {productsList.length > 0 ? (
         productsList.map(({ id, title, thumbnail, price }) => (
-          <button
+          <div
             key={ id }
             data-testid="product"
-            onClick={ () => handleClickCard(id) }
           >
-            <p>{title}</p>
-            <Link data-testid="product-detail-link" to={ `/ProductDetail/${id}` } />
-            <img src={ thumbnail } alt={ title } />
-            <p>{price}</p>
+            <Link to={ `/product-detail/${id}` } data-testid="product-detail-link">
+              <p>{title}</p>
+              <img src={ thumbnail } alt={ title } />
+              <p>{price}</p>
+            </Link>
             <button
               data-testid="product-add-to-cart"
-              onClick={ (event) => {
-                event.stopPropagation();
+              onClick={ () => {
                 handleClickAddToCart(id);
+                /* navigate('/shopping-cart'); */
               } }
             >
               Adicionar ao Carrinho
             </button>
-          </button>
+          </div>
         ))
       ) : (
       // Se for falso, renderiza um elemento <h1> com uma mensagem e um atributo data-testid
