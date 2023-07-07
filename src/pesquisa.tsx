@@ -5,14 +5,14 @@ import { getCategories, getProductsFromCategoryAndQuery } from './services/api';
 type CategoriesArray = {
   id: string;
   name: string;
-} [];
+}[];
 
 type DisplayResults = {
   id: string;
   title: string;
   thumbnail: string;
   price: number;
-} [];
+}[];
 
 export default function Pesquisa() {
   // Define o valor inicial da variável de estado como um array vazio
@@ -33,33 +33,53 @@ export default function Pesquisa() {
     categories();
   }, []);
 
+  const handleClickCard = (id: string) => {
+    navigate(`/product/:${id}`);
+  };
+
+  const handleClickAddToCart = (id: string) => {
+    const clickedProduct = productsList.find((product) => product.id === id);
+    if (clickedProduct) {
+      const savedCartItems = localStorage.getItem('cartItems');
+      if (savedCartItems) {
+        const cartItems = JSON.parse(savedCartItems);
+        localStorage.setItem(
+          'cartItems',
+          JSON.stringify([...cartItems, clickedProduct]),
+        );
+      } else {
+        localStorage.setItem(
+          'cartItems',
+          JSON.stringify([clickedProduct]),
+        );
+      }
+    }
+  };
   // Adiciona a função que lida com o click do botão de pesquisa
-  const handleBotao = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleBotao = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     event.preventDefault();
     const produtos = await getProductsFromCategoryAndQuery(undefined, search);
     setProductsList(produtos.results);
   };
 
   const handleRadio = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const categoriaId = categoriesArray
-      .find((element) => element.id === event.target.id);
-    const resultadosCategoria = await
-    getProductsFromCategoryAndQuery(categoriaId?.id, undefined);
+    const categoriaId = categoriesArray.find(
+      (element) => element.id === event.target.id,
+    );
+    const resultadosCategoria = await getProductsFromCategoryAndQuery(
+      categoriaId?.id,
+      undefined,
+    );
     setProductsList(resultadosCategoria.results);
-  };
-
-  const handleClickCard = (id: string) => {
-    navigate(`/product/:${id}`);
   };
 
   return (
     <div>
       {/* Renderiza button que dá acesso à página do carrinho de compras */}
       <button>
-        <Link
-          data-testid="shopping-cart-button"
-          to="/shopping-cart"
-        >
+        <Link data-testid="shopping-cart-button" to="/shopping-cart">
           Carrinho de Compras
         </Link>
       </button>
@@ -83,7 +103,9 @@ export default function Pesquisa() {
       <h2>Categorias:</h2>
       {categoriesArray.map(({ id, name }) => (
         <div key={ id }>
-          <label data-testid="category" htmlFor={ id }>{ name }</label>
+          <label data-testid="category" htmlFor={ id }>
+            {name}
+          </label>
           <input
             type="radio"
             id={ id }
@@ -93,30 +115,34 @@ export default function Pesquisa() {
       ))}
       {/* Verifica se o tamanho do array productArray é igual a zero */}
       {/* Alterado para productsList para renderização */}
-      {productsList.length > 0
-        ? (
-          productsList.map(({ id, title, thumbnail, price }) => (
+      {productsList.length > 0 ? (
+        productsList.map(({ id, title, thumbnail, price }) => (
+          <button
+            key={ id }
+            data-testid="product"
+            onClick={ () => handleClickCard(id) }
+          >
+            <p>{title}</p>
+            <Link data-testid="product-detail-link" to={ `/ProductDetail/${id}` } />
+            <img src={ thumbnail } alt={ title } />
+            <p>{price}</p>
             <button
-              key={ id }
-              data-testid="product"
-              onClick={ () => handleClickCard(id) }
+              data-testid="product-add-to-cart"
+              onClick={ (event) => {
+                event.stopPropagation();
+                handleClickAddToCart(id);
+              } }
             >
-              <p>
-                { title }
-              </p>
-              <Link data-testid="product-detail-link" to={ `/ProductDetail/${id}` } />
-              <img src={ thumbnail } alt={ title } />
-              <p>
-                { price }
-              </p>
+              Adicionar ao Carrinho
             </button>
-          ))
-        )
-        : (
-          // Se for falso, renderiza um elemento <h1> com uma mensagem e um atributo data-testid
-          <h1 data-testid="home-initial-message">
-            Digite algum termo de pesquisa ou escolha uma categoria.
-          </h1>)}
+          </button>
+        ))
+      ) : (
+      // Se for falso, renderiza um elemento <h1> com uma mensagem e um atributo data-testid
+        <h1 data-testid="home-initial-message">
+          Digite algum termo de pesquisa ou escolha uma categoria.
+        </h1>
+      )}
     </div>
   );
 }
