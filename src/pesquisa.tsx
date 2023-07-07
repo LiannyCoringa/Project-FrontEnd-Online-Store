@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from './services/api';
 
 type CategoriesArray = {
@@ -21,6 +21,7 @@ export default function Pesquisa() {
   // Cria um estado para manipulação do input
   const [search, setSearch] = useState('');
   const [productsList, setProductsList] = useState<DisplayResults>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Nesse efeito, a função setResultsArray é chamada para definir o valor inicial da variável de estado resultsArray como um array vazio.
@@ -45,6 +46,10 @@ export default function Pesquisa() {
     const resultadosCategoria = await
     getProductsFromCategoryAndQuery(categoriaId?.id, undefined);
     setProductsList(resultadosCategoria.results);
+  };
+
+  const handleClickCard = (id: string) => {
+    navigate(`/product/:${id}`);
   };
 
   return (
@@ -91,7 +96,11 @@ export default function Pesquisa() {
       {productsList.length > 0
         ? (
           productsList.map(({ id, title, thumbnail, price }) => (
-            <div key={ id } data-testid="product">
+            <div
+              key={ id }
+              data-testid="product"
+              onClick={ () => handleClickCard(id) }
+            >
               <p>
                 { title }
               </p>

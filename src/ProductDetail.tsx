@@ -6,6 +6,7 @@ import { getProductById } from './services/api';
 function ProductDetail() {
   const [product, setProduct] = useState<Product | null>(null);
   const { id } = useParams();
+  console.log(id);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +25,7 @@ function ProductDetail() {
       </button>
       <button
         data-testid="shopping-cart-button"
-        onClick={ () => navigate('./Carrinho') }
+        onClick={ () => navigate('/shopping-cart') }
       >
         Seu Carrinho
       </button>
