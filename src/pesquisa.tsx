@@ -95,6 +95,7 @@ export default function Pesquisa() {
               <p>
                 { title }
               </p>
+              <Link data-testid="product-detail-link" to={ `/ProductDetail/${id}` } />
               <img src={ thumbnail } alt={ title } />
               <p>
                 { price }
