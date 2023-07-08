@@ -11,7 +11,7 @@ function App() {
     <Routes>
       <Route path="/" element={ <Pesquisa /> } />
       <Route path="/shopping-cart" element={ <Carrinho /> } />
-      <Route path="/product/:id" element={ <ProductDetail /> } />
+      <Route path="/product-detail/:id" element={ <ProductDetail /> } />
     </Routes>
   );
 }
