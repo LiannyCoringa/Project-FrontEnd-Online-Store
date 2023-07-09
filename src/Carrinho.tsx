@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react';
-
-interface Product {
-  id: string;
-  title: string;
-  price: number;
-}
+import { ProductType } from './types/types';
 
 function Carrinho() {
   // Define uma variável de estado chamada carrinhoArray e uma função para atualizá-la, setCarrinhoArray
-  const [carrinhoArray, setCarrinhoArray] = useState<Product[]>([]);
+  const [carrinhoArray, setCarrinhoArray] = useState<ProductType[]>([]);
   // Define o valor inicial da variável de estado como um array vazio
 
   useEffect(() => {
