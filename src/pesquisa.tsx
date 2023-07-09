@@ -1,18 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from './services/api';
-
-type CategoriesArray = {
-  id: string;
-  name: string;
-}[];
-
-type DisplayResults = {
-  id: string;
-  title: string;
-  thumbnail: string;
-  price: number;
-}[];
+import { CategoriesArray, DisplayResults } from './types/types';
 
 export default function Pesquisa() {
   // Define o valor inicial da variável de estado como um array vazio
@@ -21,7 +10,6 @@ export default function Pesquisa() {
   // Cria um estado para manipulação do input
   const [search, setSearch] = useState('');
   const [productsList, setProductsList] = useState<DisplayResults>([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Nesse efeito, a função setResultsArray é chamada para definir o valor inicial da variável de estado resultsArray como um array vazio.
@@ -32,10 +20,6 @@ export default function Pesquisa() {
     };
     categories();
   }, []);
-
-  const handleClickCard = (id: string) => {
-    navigate(`/product/:${id}`);
-  };
 
   const handleClickAddToCart = (id: string) => {
     const clickedProduct = productsList.find((product) => product.id === id);
@@ -116,7 +100,7 @@ export default function Pesquisa() {
       {/* Verifica se o tamanho do array productArray é igual a zero */}
       {/* Alterado para productsList para renderização */}
       {productsList.length > 0 ? (
-        productsList.map(({ id, title, thumbnail, price }) => (
+        productsList.map(({ id, title, thumbnail, price, currency_id }) => (
           <div
             key={ id }
             data-testid="product"
@@ -124,7 +108,7 @@ export default function Pesquisa() {
             <Link to={ `/product-detail/${id}` } data-testid="product-detail-link">
               <p>{title}</p>
               <img src={ thumbnail } alt={ title } />
-              <p>{price}</p>
+              <p>{`${currency_id} ${price}`}</p>
             </Link>
             <button
               data-testid="product-add-to-cart"
