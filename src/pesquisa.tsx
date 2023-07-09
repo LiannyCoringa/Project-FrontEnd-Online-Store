@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from './services/api';
-import { CategoriesArray, DisplayResults } from './types/types';
+import { CategoriesArray, DisplayResults, InfoProductsInitialProp } from './types/types';
 
 export default function Pesquisa() {
   // Define o valor inicial da variável de estado como um array vazio
@@ -27,10 +27,27 @@ export default function Pesquisa() {
       const savedCartItems = localStorage.getItem('cartItems');
       if (savedCartItems) {
         const cartItems = JSON.parse(savedCartItems);
-        localStorage.setItem(
-          'cartItems',
-          JSON.stringify([...cartItems, clickedProduct]),
-        );
+        const productIndexInCart = cartItems
+          .findIndex((item: InfoProductsInitialProp) => item.id === id);
+        const productAlreadyInCart = productIndexInCart > -1;
+        if (productAlreadyInCart) {
+          const updatedProduct = {
+            ...cartItems[productIndexInCart],
+            quantity: cartItems[productIndexInCart].quantity
+              ? cartItems[productIndexInCart].quantity + 1
+              : 2,
+          };
+          cartItems[productIndexInCart] = updatedProduct;
+          localStorage.setItem(
+            'cartItems',
+            JSON.stringify(cartItems),
+          );
+        } else {
+          localStorage.setItem(
+            'cartItems',
+            JSON.stringify([...cartItems, clickedProduct]),
+          );
+        }
       } else {
         localStorage.setItem(
           'cartItems',
