@@ -11,6 +11,7 @@ export type Product = {
   thumbnail: string;
   currency_id: string;
   price: number;
+  quantity: number;
   attributes: Attributes[];
 };
 
@@ -32,3 +33,11 @@ export type DisplayResults = {
   price: number;
   currency_id: string;
 }[];
+
+export type InfoProductsInitialProp = {
+  id: string;
+  title: string;
+  thumbnail: string;
+  price: number;
+  quantity: number;
+};
