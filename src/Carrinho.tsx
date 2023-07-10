@@ -11,7 +11,8 @@ function Carrinho() {
     const savedCartItems = JSON.parse(localStorage.getItem('cartItems') as string);
     if (savedCartItems) {
       const addQuantity = savedCartItems
-        .map((cartItem: InfoProductsInitialProp) => ({ ...cartItem, quantity: 1 }));
+        .map((cartItem: InfoProductsInitialProp) => (
+          { ...cartItem, quantity: cartItem.quantity ?? 1 }));
       setCarrinhoArray((addQuantity));
     } else {
       setCarrinhoArray([]);
